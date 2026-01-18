@@ -1,53 +1,45 @@
 #!/bin/bash
 set -e
 
-echo "===== Starting full compatibility test ====="
+FILE="compatible-fullstack-versions.txt"
 
-# Path to the file with version sets
-VERSION_FILE="compatible-fullstack-versions.txt"
+echo "===== Running compatibility tests ====="
 
-# Header for summary output
-echo "Compatible version sets found:"
-echo "--------------------------------"
+# Skip the header line and read each combination
+tail -n +2 "$FILE" | while read HARDHAT ETHERS DOTENV REACT REACTDOM; do
+    echo
+    echo "===== Testing combination: Hardhat $HARDHAT, Ethers $ETHERS, Dotenv $DOTENV, React $REACT, ReactDOM $REACTDOM ====="
 
-# Iterate over each line in the file
-while read -r line; do
-    # Split line into variables
-    HARDHAT_VER=$(echo "$line" | awk '{print $1}')
-    ETHERS_VER=$(echo "$line" | awk '{print $2}')
-    DOTENV_VER=$(echo "$line" | awk '{print $3}')
-    REACT_VER=$(echo "$line" | awk '{print $4}')
-    REACTDOM_VER=$(echo "$line" | awk '{print $5}')
-
-    echo "Testing combination: Hardhat $HARDHAT_VER | Ethers $ETHERS_VER | Dotenv $DOTENV_VER | React $REACT_VER | ReactDOM $REACTDOM_VER"
-
-    # Create temporary package.json for this test
-    cat > temp-package.json <<EOF
+    # Create temporary package.json for this combination
+    cat > temp-package.json <<EOL
 {
   "name": "dao-compatibility-test",
   "version": "1.0.0",
+  "private": true,
   "dependencies": {
-    "hardhat": "$HARDHAT_VER",
-    "ethers": "$ETHERS_VER",
-    "dotenv": "$DOTENV_VER",
-    "react": "$REACT_VER",
-    "react-dom": "$REACTDOM_VER"
+    "hardhat": "$HARDHAT",
+    "ethers": "$ETHERS",
+    "dotenv": "$DOTENV",
+    "react": "$REACT",
+    "react-dom": "$REACTDOM"
   }
 }
-EOF
+EOL
 
-    # Install dependencies in a clean node_modules
+    # Remove node_modules if exists to ensure clean install
     rm -rf node_modules package-lock.json
-    if npm install --ignore-scripts --silent; then
-        echo "✅ Success: $line"
-        echo "$line" >> compatible-found.txt
+
+    # Install dependencies
+    npm install --legacy-peer-deps
+
+    if [ $? -eq 0 ]; then
+        echo "✅ Combination succeeded: Hardhat $HARDHAT, Ethers $ETHERS, Dotenv $DOTENV, React $REACT, ReactDOM $REACTDOM"
     else
-        echo "❌ Failed: $line"
+        echo "❌ Combination FAILED"
     fi
 
-    # Clean up temp package.json
-    rm temp-package.json
-done < "$VERSION_FILE"
+    # Optional: cleanup after each iteration
+    # rm -rf node_modules package-lock.json temp-package.json
+done
 
-echo "===== Compatibility test complete ====="
-echo "✅ Compatible combinations saved in compatible-found.txt"
+echo "===== Compatibility test completed ====="
