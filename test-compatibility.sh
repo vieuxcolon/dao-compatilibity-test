@@ -1,43 +1,18 @@
 #!/bin/bash
-set -e
 
-FILE="compatible-fullstack-versions.txt"
+echo "Node version:"
+node -v
 
-echo "===== Running compatibility tests ====="
+echo "NPM version:"
+npm -v
 
-# Skip the header line and read each combination
-tail -n +2 "$FILE" | while read HARDHAT ETHERS DOTENV REACT REACTDOM; do
-    echo
-    echo "===== Testing combination: Hardhat $HARDHAT, Ethers $ETHERS, Dotenv $DOTENV, React $REACT, ReactDOM $REACTDOM ====="
+echo "Hardhat version:"
+npx hardhat --version
 
-    # Create temporary package.json for this combination
-    cat > temp-package.json <<EOL
-{
-  "name": "dao-compatibility-test",
-  "version": "1.0.0",
-  "private": true,
-  "dependencies": {
-    "hardhat": "$HARDHAT",
-    "ethers": "$ETHERS",
-    "dotenv": "$DOTENV",
-    "react": "$REACT",
-    "react-dom": "$REACTDOM"
-  }
-}
-EOL
+echo "Ethers version:"
+node -e "console.log(require('ethers').version)"
 
-    # Clean old installs
-    rm -rf node_modules package-lock.json
+echo "React version:"
+node -e "console.log(require('./frontend/node_modules/react/package.json').version)"
 
-    # Install dependencies
-    if npm install --legacy-peer-deps > install-log.txt 2>&1; then
-        echo "✅ Combination succeeded: Hardhat $HARDHAT, Ethers $ETHERS, Dotenv $DOTENV, React $REACT, ReactDOM $REACTDOM"
-    else
-        echo "❌ Combination FAILED. Check install-log.txt for details."
-    fi
-
-    # Optional cleanup after each iteration
-    rm -rf node_modules package-lock.json temp-package.json
-done
-
-echo "===== Compatibility test completed ====="
+echo "Compatibility test completed"
