@@ -1,6 +1,12 @@
+version: "3.9"
+
 services:
-  eth-stack:
+  dao:
     build: .
+    container_name: dao-test
+    ports:
+      - "3000:3000"
+      - "8545:8545"
     volumes:
-      - .:/workspace
-    command: /workspace/test-compatibility.sh
+      - .:/app
+    tty: true
