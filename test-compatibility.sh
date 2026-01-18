@@ -1,17 +1,12 @@
 #!/bin/bash
-echo "Checking installed versions..."
+# dao-compatibility-test/test-compatibility.sh
 
-# Node & NPM
-echo "Node version: $(node -v)"
-echo "NPM version: $(npm -v)"
+set -e
 
-# Hardhat
-echo "Hardhat version: $(npx hardhat --version)"
+IMAGE_NAME="dao-compat-test"
 
-# Ethers
-echo "Ethers version: $(npm list ethers | grep ethers)"
+# Build the Docker image
+docker build -t $IMAGE_NAME .
 
-# React
-echo "React version: $(npm list react | grep react)"
-
-echo "Compatibility check finished."
+# Run the container and execute the compatibility test
+docker run --rm $IMAGE_NAME npm run test-compat
