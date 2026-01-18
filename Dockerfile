@@ -1,24 +1,20 @@
-# Dockerfile
-FROM node:18-slim
-
-# Install Python and build tools
-RUN apt-get update && \
-    apt-get install -y python3 python3-pip git curl build-essential && \
-    rm -rf /var/lib/apt/lists/*
-
-# Upgrade pip, setuptools, wheel
-RUN python3 -m pip install --upgrade pip setuptools wheel
+# Use official Node 20 LTS
+FROM node:20.6.0
 
 # Set working directory
 WORKDIR /workspace
 
-# Copy test script
-COPY test-compatibility.sh /workspace/test-compatibility.sh
-RUN chmod +x /workspace/test-compatibility.sh
+# Install git (needed for Hardhat and Ethers packages sometimes)
+RUN apt-get update && apt-get install -y git curl && rm -rf /var/lib/apt/lists/*
 
-# Install Node dependencies (Hardhat + ethers + React)
-RUN npm init -y
-RUN npm install hardhat@3.3.0 ethers@6.10.0 react@18.3.0 react-dom@18.3.0 dotenv@16.1.1
+# Copy package.json to install dependencies
+COPY package.json ./
 
-# Default entrypoint
-CMD [ "/workspace/test-compatibility.sh" ]
+# Install pinned dependencies
+RUN npm install
+
+# Expose default Hardhat port for local node (optional)
+EXPOSE 8545
+
+# Default command: bash
+CMD ["/bin/bash"]
