@@ -26,20 +26,18 @@ tail -n +2 "$FILE" | while read HARDHAT ETHERS DOTENV REACT REACTDOM; do
 }
 EOL
 
-    # Remove node_modules if exists to ensure clean install
+    # Clean old installs
     rm -rf node_modules package-lock.json
 
     # Install dependencies
-    npm install --legacy-peer-deps
-
-    if [ $? -eq 0 ]; then
+    if npm install --legacy-peer-deps > install-log.txt 2>&1; then
         echo "✅ Combination succeeded: Hardhat $HARDHAT, Ethers $ETHERS, Dotenv $DOTENV, React $REACT, ReactDOM $REACTDOM"
     else
-        echo "❌ Combination FAILED"
+        echo "❌ Combination FAILED. Check install-log.txt for details."
     fi
 
-    # Optional: cleanup after each iteration
-    # rm -rf node_modules package-lock.json temp-package.json
+    # Optional cleanup after each iteration
+    rm -rf node_modules package-lock.json temp-package.json
 done
 
 echo "===== Compatibility test completed ====="
