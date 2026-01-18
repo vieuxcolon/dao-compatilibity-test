@@ -1,26 +1,17 @@
-
 #!/bin/bash
-set -e
+echo "Checking installed versions..."
 
-echo "=== Node.js version ==="
-node -v
+# Node & NPM
+echo "Node version: $(node -v)"
+echo "NPM version: $(npm -v)"
 
-echo "=== npm version ==="
-npm -v
+# Hardhat
+echo "Hardhat version: $(npx hardhat --version)"
 
-echo "=== Hardhat version ==="
-npx hardhat --version
+# Ethers
+echo "Ethers version: $(npm list ethers | grep ethers)"
 
-echo "=== Ethers.js version ==="
-npm list ethers | head -n 2
+# React
+echo "React version: $(npm list react | grep react)"
 
-echo "=== React version ==="
-npm list react react-dom | head -n 3
-
-echo "=== Python version ==="
-python3 --version
-
-echo "=== pip packages ==="
-pip3 list | grep -E 'web3|eth-brownie|pytest|dotenv' || echo "Optional packages not installed"
-
-echo "✅ All versions installed successfully and compatible!"
+echo "Compatibility check finished."
