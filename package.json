@@ -1,0 +1,16 @@
+{
+  "name": "dao-compatibility-test",
+  "version": "1.0.0",
+  "private": true,
+  "devDependencies": {
+    "hardhat": "3.5.0",
+    "ethers": "6.10.0"
+  },
+  "dependencies": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "scripts": {
+    "test-versions": "node -e \"console.log('Node:', process.version);\" && npx hardhat --version && npx hardhat node & sleep 3 && npx hardhat stop || true"
+  }
+}
