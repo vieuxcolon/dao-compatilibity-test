@@ -1,20 +1,32 @@
-# Use Node.js stable slim image
-FROM node:22-slim
+FROM node:22.10.0
 
 # Set working directory
-WORKDIR /workspace
+WORKDIR /app
 
-# Install dependencies needed for git/npm builds
-RUN apt-get update && \
-    apt-get install -y git curl && \
-    rm -rf /var/lib/apt/lists/*
+# Copy root files
+COPY package.json ./
+COPY hardhat.config.js ./
+COPY .env ./
 
-# Copy the compatibility test files
-COPY compatible-fullstack-versions.txt ./
-COPY test-compatibility.sh ./
+# Copy backend
+COPY contracts ./contracts
+COPY scripts ./scripts
 
-# Make the test script executable
-RUN chmod +x test-compatibility.sh
+# Install backend deps
+RUN npm install
 
-# Run the compatibility tests by default when container starts
-CMD ["./test-compatibility.sh"]
+# Copy frontend
+COPY frontend ./frontend
+
+# Install frontend deps
+WORKDIR /app/frontend
+RUN npm install
+
+# Back to root
+WORKDIR /app
+
+# Expose frontend port
+EXPOSE 3000
+
+CMD ["bash"]
+
