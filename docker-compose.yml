@@ -1,0 +1,7 @@
+version: "3.9"
+services:
+  eth-stack:
+    build: .
+    volumes:
+      - .:/workspace
+    command: /workspace/test-compatibility.sh
