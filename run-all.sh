@@ -4,13 +4,13 @@ set -e
 CONTAINER_NAME="dao-test"
 IMAGE_NAME="dao-compatibility-test-dao"
 
-echo "🛑 Cleaning up old container if exists..."
+echo " Cleaning up old container if exists..."
 docker rm -f $CONTAINER_NAME >/dev/null 2>&1 || true
 
-echo "🐳 Building Docker image (no cache)..."
+echo " Building Docker image (no cache)..."
 docker build --no-cache -t $IMAGE_NAME .
 
-echo "🐳 Starting container..."
+echo " Starting container..."
 docker run -d \
   --name $CONTAINER_NAME \
   -p 3000:3000 \
@@ -20,23 +20,23 @@ docker run -d \
   $IMAGE_NAME \
   tail -f /dev/null
 
-echo "⌛ Waiting a few seconds for container to be ready..."
+echo " Waiting a few seconds for container to be ready..."
 sleep 3
 
-echo "🔧 Installing backend (Hardhat) dependencies..."
+echo " Installing backend (Hardhat) dependencies..."
 docker exec $CONTAINER_NAME bash -c "npm install --legacy-peer-deps"
 
-echo "🔧 Installing frontend dependencies..."
+echo " Installing frontend dependencies..."
 docker exec $CONTAINER_NAME bash -c "cd frontend && npm install --legacy-peer-deps"
 
-echo "⚡ Compiling Hardhat contracts..."
+echo " Compiling Hardhat contracts..."
 docker exec $CONTAINER_NAME bash -c "npx hardhat compile"
 
-echo "🚀 Deploying contracts..."
+echo " Deploying contracts..."
 docker exec $CONTAINER_NAME bash -c "npx hardhat run scripts/deploy.js --network localhost"
 
 echo
-echo "✅ DAO Investment DApp is ready!"
+echo " DAO Investment DApp is ready!"
 echo "Frontend: http://localhost:3000"
 echo "Hardhat node: http://localhost:8545"
 echo
