@@ -23,6 +23,12 @@ docker run -d \
 echo "⌛ Waiting a few seconds for container to be ready..."
 sleep 3
 
+echo "🔧 Installing backend (Hardhat) dependencies..."
+docker exec $CONTAINER_NAME bash -c "npm install --legacy-peer-deps"
+
+echo "🔧 Installing frontend dependencies..."
+docker exec $CONTAINER_NAME bash -c "cd frontend && npm install --legacy-peer-deps"
+
 echo "⚡ Compiling Hardhat contracts..."
 docker exec $CONTAINER_NAME bash -c "npx hardhat compile"
 
