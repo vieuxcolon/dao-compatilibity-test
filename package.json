@@ -12,7 +12,6 @@
   "dependencies": {
     "dotenv": "16.1.2",
     "ethers": "^6.16.0",
-    "hardhat": "^2.28.3",
     "react": "18.3.0",
     "react-dom": "18.3.0"
   },
@@ -28,6 +27,7 @@
     "@types/chai": "^4.3.20",
     "@types/mocha": "^10.0.10",
     "chai": "^4.5.0",
+    "hardhat": "^2.28.3",
     "hardhat-gas-reporter": "^2.3.0",
     "solidity-coverage": "^0.8.17",
     "ts-node": "^10.9.2",
