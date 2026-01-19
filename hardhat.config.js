@@ -1,15 +1,10 @@
-require("@nomicfoundation/hardhat-toolbox");
-require("dotenv").config();
+import "@nomicfoundation/hardhat-toolbox";
 
-module.exports = {
+export default {
   solidity: "0.8.20",
   networks: {
-    hardhat: {
-      chainId: 1337
-    },
     localhost: {
-      url: process.env.RPC_URL,
-      accounts: [process.env.PRIVATE_KEY]
+      url: "http://127.0.0.1:8545"
     }
   }
 };
