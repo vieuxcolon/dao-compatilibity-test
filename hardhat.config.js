@@ -1,4 +1,3 @@
-// hardhat.config.js  USE THIS
 import '@nomicfoundation/hardhat-toolbox';
 import dotenv from 'dotenv';
 
