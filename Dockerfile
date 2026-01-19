@@ -8,24 +8,22 @@ FROM node:22.10.0
 # Set working directory
 WORKDIR /app
 
-# Copy root/backend files
+# Copy backend files
 COPY package.json package-lock.json* ./
 COPY hardhat.config.js ./
 COPY .env ./
-
-# Copy contracts and scripts
 COPY contracts ./contracts
 COPY scripts ./scripts
 
-# Install backend dependencies
-RUN npm install
+# Install backend dependencies with legacy-peer-deps
+RUN npm install --legacy-peer-deps
 
-# Copy frontend files
+# Copy frontend
 COPY frontend ./frontend
 
 # Install frontend dependencies
 WORKDIR /app/frontend
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 # Return to root
 WORKDIR /app
