@@ -1,22 +1,18 @@
 {
-  "name": "dao-investment-dapp",
+  "name": "dao-investment-dapp-backend",
   "version": "1.0.0",
   "private": true,
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "hardhat": "hardhat"
-  },
   "dependencies": {
-    "hardhat": "3.0.0",
     "ethers": "6.10.0",
-    "dotenv": "16.1.0",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "dotenv": "16.1.0"
   },
   "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "3.0.0"
+    "hardhat": "3.1.4",
+    "@nomicfoundation/hardhat-toolbox": "3.1.4"
+  },
+  "scripts": {
+    "compile": "hardhat compile",
+    "deploy": "hardhat run scripts/deploy.js"
   },
   "engines": {
     "node": ">=22.10.0"
