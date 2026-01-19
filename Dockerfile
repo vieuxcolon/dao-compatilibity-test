@@ -1,6 +1,5 @@
 # -----------------------------
 # DAO Investment DApp Dockerfile
-# Fully compatible stack
 # -----------------------------
 
 FROM node:22.10.0
@@ -8,14 +7,16 @@ FROM node:22.10.0
 # Set working directory
 WORKDIR /app
 
-# Copy backend files
+# Copy backend/root files
 COPY package.json package-lock.json* ./
-COPY hardhat.config.js ./
+COPY hardhat.config.mjs ./
 COPY .env ./
+
+# Copy contracts and scripts
 COPY contracts ./contracts
 COPY scripts ./scripts
 
-# Install backend dependencies with legacy-peer-deps
+# Install backend dependencies
 RUN npm install --legacy-peer-deps
 
 # Copy frontend
