@@ -4,12 +4,11 @@
 
 FROM node:22.10.0
 
-# Set working directory
 WORKDIR /app
 
 # Copy backend/root files
 COPY package.json package-lock.json* ./
-COPY hardhat.config.mjs ./
+COPY hardhat.config.js ./
 COPY .env ./
 
 # Copy contracts and scripts
@@ -32,5 +31,4 @@ WORKDIR /app
 # Expose ports
 EXPOSE 3000 8545
 
-# Default entrypoint
 CMD ["bash"]
