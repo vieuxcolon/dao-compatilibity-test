@@ -1,9 +1,11 @@
 # -----------------------------
 # DAO Investment DApp Dockerfile
+# Fully isolated build
 # -----------------------------
 
 FROM node:22.10.0
 
+# Set working directory
 WORKDIR /app
 
 # Copy backend/root files
@@ -31,4 +33,5 @@ WORKDIR /app
 # Expose ports
 EXPOSE 3000 8545
 
+# Default entrypoint
 CMD ["bash"]
