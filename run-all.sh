@@ -2,7 +2,7 @@
 set -e
 
 CONTAINER_NAME="dao-test"
-IMAGE_NAME="dao-test"
+IMAGE_NAME="dao-compatibility-test-dao"
 
 echo " Cleaning up old container if exists..."
 docker rm -f $CONTAINER_NAME >/dev/null 2>&1 || true
@@ -23,11 +23,3 @@ sleep 3
 
 echo " Compiling Hardhat contracts..."
 docker exec $CONTAINER_NAME npx hardhat compile
-
-echo " Deploying contracts..."
-docker exec $CONTAINER_NAME npx hardhat run scripts/deploy.js --network localhost
-
-echo
-echo " DAO Investment DApp backend ready"
-echo "You can enter the container with:"
-echo "docker exec -it $CONTAINER_NAME bash"
