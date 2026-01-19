@@ -7,8 +7,8 @@ IMAGE_NAME="dao-compatibility-test-dao"
 echo "🛑 Cleaning up old container if exists..."
 docker rm -f $CONTAINER_NAME >/dev/null 2>&1 || true
 
-echo "🐳 Building Docker image..."
-docker build -t $IMAGE_NAME .
+echo "🐳 Building Docker image (no cache)..."
+docker build --no-cache -t $IMAGE_NAME .
 
 echo "🐳 Starting container..."
 docker run -d \
