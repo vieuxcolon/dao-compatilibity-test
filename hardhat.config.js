@@ -1,12 +1,13 @@
 // hardhat.config.js
-require("@nomicfoundation/hardhat-toolbox");
-require("dotenv").config();
+import "@nomicfoundation/hardhat-toolbox";
+import dotenv from "dotenv";
+dotenv.config();
 
-module.exports = {
-  solidity: "0.8.20",
+export default {
+  solidity: "0.8.21",  // updated from 0.8.20
   networks: {
     localhost: {
-      url: "http://127.0.0.1:8545",
-    },
-  },
+      url: "http://127.0.0.1:8545"
+    }
+  }
 };
