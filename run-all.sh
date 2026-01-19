@@ -1,26 +1,31 @@
 #!/bin/bash
 set -e
 
-echo "Starting Hardhat node..."
-npx hardhat node &
-sleep 5
+CONTAINER_NAME="dao-test"
 
-echo "Compiling contracts..."
-npx hardhat compile
+echo "🛑 Cleaning up old container if exists..."
+docker rm -f $CONTAINER_NAME >/dev/null 2>&1 || true
 
-echo "Deploying InvestmentDAO..."
-DEPLOY_OUTPUT=$(npx hardhat run scripts/deploy.js --network localhost)
-echo "$DEPLOY_OUTPUT"
+echo "🐳 Building Docker image..."
+docker compose build
 
-DAO_ADDRESS=$(echo "$DEPLOY_OUTPUT" | grep -oE "0x[a-fA-F0-9]{40}")
+echo "🐳 Starting container..."
+docker compose up -d
 
-echo "Updating frontend config..."
-sed -i "s/PUT_DEPLOYED_CONTRACT_ADDRESS_HERE/$DAO_ADDRESS/g" frontend/src/daoConfig.js
+echo "⌛ Waiting a few seconds for container to be ready..."
+sleep 3
 
-echo "Copying ABI to frontend..."
-mkdir -p frontend/src/abi
-cp artifacts/contracts/InvestmentDAO.sol/InvestmentDAO.json frontend/src/abi/
+echo "🔧 Running backend (Hardhat) compile and deploy inside container..."
+docker exec -it $CONTAINER_NAME bash -c "
+  cd /app && \
+  npx hardhat compile && \
+  npx hardhat run scripts/deploy.js
+"
 
-echo "Starting frontend..."
-cd frontend
-npm start
+echo "🚀 Starting frontend..."
+docker exec -it $CONTAINER_NAME bash -c "
+  cd /app/frontend && \
+  npm start
+"
+
+echo "✅ All set! Frontend running on http://localhost:3000 and Hardhat RPC on http://localhost:8545"
